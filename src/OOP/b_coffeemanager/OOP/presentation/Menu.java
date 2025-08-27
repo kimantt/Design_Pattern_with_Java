@@ -6,6 +6,7 @@ import java.util.Scanner;
 import OOP.b_coffeemanager.OOP.domain.account.Account;
 import OOP.b_coffeemanager.OOP.domain.coffee.Coffee;
 import OOP.b_coffeemanager.OOP.domain.order.Order;
+import OOP.b_coffeemanager.OOP.domain.payment.Payment;
 import OOP.b_coffeemanager.OOP.domain.sale.SaleContext;
 
 // presentation : 표현계층
@@ -84,12 +85,12 @@ public class Menu {
 			return;
 		}
 		
-		saleContext.init(order);
+		Payment payment = saleContext.init(order);
 		
 		System.out.println("제품명 : " + coffees[drinkNo].getName() +
 				"\n판매가 : " + coffees[drinkNo].getPrice() +
 				"\n판매수량 : " + orderCnt +
-				"\n결재금액 : " + (orderCnt * coffees[drinkNo].getPrice()) +
+				"\n결재금액 : " + payment.getPaymentPrice() +
 				"\n남은 재고 : " + coffees[drinkNo].getStock());
 	}
 	
