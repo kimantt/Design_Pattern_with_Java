@@ -8,6 +8,10 @@ import OOP.b_coffeemanager.OOP.domain.coffee.Coffee;
 import OOP.b_coffeemanager.OOP.domain.order.Order;
 import OOP.b_coffeemanager.OOP.domain.payment.Payment;
 import OOP.b_coffeemanager.OOP.domain.sale.SaleContext;
+import OOP.b_coffeemanager.OOP.domain.multilingual.payment.translate.UsaDecorator;
+import OOP.b_coffeemanager.OOP.domain.multilingual.payment.translate.ChinaDecorator;
+import OOP.b_coffeemanager.OOP.domain.multilingual.payment.translate.SpainDecorator;
+import OOP.b_coffeemanager.OOP.domain.multilingual.payment.translate.Translatable;
 
 // presentation : 표현계층
 // 서비스 외부의 요청을 받고 응답을 보내는 계층
@@ -78,6 +82,7 @@ public class Menu {
 	}
 
 	private void registOrder(int drinkNo, int orderCnt) {
+		Scanner sc = new Scanner(System.in);
 		Order order = Order.createOrder(coffees[drinkNo], orderCnt);
 		
 		if (order.getStatus().isFail()) {
@@ -85,13 +90,39 @@ public class Menu {
 			return;
 		}
 		
-		Payment payment = saleContext.init(order);
+		Translatable<Payment> payment = saleContext.init(order);
+		
+		loop : while (true) {
+			System.out.println("선택할 다국어");
+			System.out.println("1. 영어");
+			System.out.println("2. 중국어");
+			System.out.println("3. 스페인어");
+			System.out.println("4. 선택안함");
+			int multilingual = sc.nextInt();
+			
+			if (multilingual == 4) break;
+			switch (multilingual) {
+			case 1:
+				payment = new UsaDecorator(payment);
+				break loop;
+			case 2:
+				payment = new ChinaDecorator(payment);
+				break loop;
+			case 3:
+				payment = new SpainDecorator(payment);
+				break loop;
+			default:
+				throw new IllegalArgumentException("Unexpected value: " + multilingual);
+			}
+		}
 		
 		System.out.println("제품명 : " + coffees[drinkNo].getName() +
 				"\n판매가 : " + coffees[drinkNo].getPrice() +
 				"\n판매수량 : " + orderCnt +
-				"\n결재금액 : " + payment.getPaymentPrice() +
 				"\n남은 재고 : " + coffees[drinkNo].getStock());
+		
+		System.out.println("====== 판매정보 ======");
+		System.out.println(payment.tranlate());
 	}
 	
 }
