@@ -3,10 +3,8 @@ package OOP.e_game;
 import java.util.Random;
 import java.util.Scanner;
 
-import OOP.e_game.character.Monster;
 import OOP.e_game.character.Player;
-import OOP.e_game.item.equipment.Equipment;
-import OOP.e_game.item.equipment.EquipmentData;
+import OOP.e_game.event.EquipmentEvent;
 import OOP.e_game.event.Event;
 import OOP.e_game.event.FoodEvent;
 import OOP.e_game.event.CombatEvent;
@@ -18,52 +16,32 @@ public class Run {
 		Random random = new Random();
 		Scanner sc = new Scanner(System.in);
 		Player player = new Player("플레이어", 200, 30, 10);
-		Monster monster = new Monster("몬스터", 200, 30, 10);
-		
-		for (int i = 0; i < 8; i++) {
-			System.out.println("------------------------------------");
-			System.out.println((i+1) + "일차 모험이 시작되었습니다.");
-			Event event = new FoodEvent();
-			event.proceed(player, sc);
+		int day = 8;
+		Event[] events = new Event[day];
+		for (int i = 0; i < events.length; i++) {
+			int e = random.nextInt(0, 3);
+			events[i] = switch (e) {
+				case 0 -> new CombatEvent();
+				case 1 -> new FoodEvent();
+				case 2 -> new EquipmentEvent();
+				default -> throw new IllegalArgumentException("Unexpected value: " + e);
+			};
 		}
 		
-		
-//		System.out.println("[전투이벤트]" + monster.getName() + " 등장!");
-//		boolean eventFlag = true;
-//		while (true) {
-//			if (player.isDead()) {
-//				System.out.println("------------------------------------");
-//				System.out.println("[결과] LOSE");
-//				break;
-//			}
-//			
-//			if (monster.isDead()) {
-//				System.out.println("------------------------------------");
-//				System.out.println("[결과] WIN");
-//				break;
-//			}
-//			
-//			System.out.print("------------------------------------");
-//			sc.nextLine();
-//			
-//			if (player.getCurrentHp() < 150) {
-//				EquipmentData[] datas = EquipmentData.values();
-//				int index = random.nextInt(0, datas.length);
-//				
-//				if (eventFlag) {
-//					Equipment equipment = datas[index].create();
-//					System.out.println(equipment.getName() + " 발견했습니다.");
-//					player.equip(datas[index].create());
-//					eventFlag = false;
-//				}
-//			}
-//			
-//			player.attack(monster);
-//			monster.attack(player);
-//			System.out.println("------------------------------------");
-//			System.out.println("[" + player.getName() + " HP] : " + player.getCurrentHp());
-//			System.out.println("[" + monster.getName() + " HP] : " + monster.getCurrentHp());
-//		}
+		for (int i = 0; i < events.length; i++) {			
+			System.out.println("------------------------------------");
+			System.out.println((i+1) + "일차 모험이 시작되었습니다.");
+			if (!events[i].proceed(player, sc)) {
+				System.out.println("플레이어가 쓰러져서 모험이 종료됩니다.");
+				System.out.print("엔터키를 누르세요.");
+				sc.nextLine();
+				break;
+			}
+			System.out.print("다음 날로 넘어가려면 엔터키를 누르세요.");
+			sc.nextLine();
+		}
+		System.out.println("------------------------------------");
+		System.out.println("모험이 종료되었습니다.");
 
 	}
 

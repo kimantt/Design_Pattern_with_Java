@@ -10,7 +10,7 @@ import OOP.e_game.item.food.FoodData;
 public class FoodEvent implements Event {
 
 	@Override
-	public void proceed(Player player, Scanner sc) {
+	public boolean proceed(Player player, Scanner sc) {
 		Random random = new Random();
 		
 		FoodData[] datas = FoodData.values();
@@ -24,6 +24,7 @@ public class FoodEvent implements Event {
 		System.out.println("HP를 회복했습니다!");
 		System.out.println("------------------------------------");
 		System.out.println("[" + player.getName() + " HP] : " + player.getCurrentHp());
+		return true;
 	}
 
 }

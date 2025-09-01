@@ -17,7 +17,7 @@ public class MusicCoordinator {
 	
 	private LLMContext context = new LLMContext();
 	private final String API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent";
-	private final String API_KEY = "AIzaSyCHtv1NzNsk9UWAXkn55HP3-hvPaOAFrPw";
+	private final String API_KEY = "Gemini-API-KEY";
 	
 	public Optional<Song> recommend(String prompt) {
 		try {

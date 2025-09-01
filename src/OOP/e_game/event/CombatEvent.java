@@ -11,7 +11,7 @@ import OOP.e_game.item.equipment.EquipmentData;
 public class CombatEvent implements Event {
 	
 	@Override
-	public void proceed(Player player, Scanner sc) {
+	public boolean proceed(Player player, Scanner sc) {
 		Random random = new Random();
 		Monster monster = new Monster("몬스터", 200, 30, 10);
 		
@@ -21,13 +21,13 @@ public class CombatEvent implements Event {
 			if (player.isDead()) {
 				System.out.println("------------------------------------");
 				System.out.println("[결과] LOSE");
-				break;
+				return false;
 			}
 			
 			if (monster.isDead()) {
 				System.out.println("------------------------------------");
 				System.out.println("[결과] WIN");
-				break;
+				return true;
 			}
 			
 			System.out.print("------------------------------------");
@@ -39,8 +39,23 @@ public class CombatEvent implements Event {
 				
 				if (eventFlag) {
 					Equipment equipment = datas[index].create();
-					System.out.println(equipment.getName() + " 발견했습니다.");
-					player.equip(datas[index].create());
+					System.out.print(equipment.getName() + "을(를) 발견했습니다. ");
+					if (player.getEquipment(equipment.getSlot()) == null || player.getEquipment(equipment.getSlot()).getName().equals("주먹")) {
+						player.equip(datas[index].create());
+						System.out.println(equipment.getName() + "를 장착했습니다.");
+					}
+					else {
+						System.out.println("[현재 장착 장비 : " + player.getEquipment(equipment.getSlot()).getName() + "]");
+						System.out.print("장착하시겠습니까? (y/n) : ");
+						String choice = sc.nextLine();
+						if (choice.equals("y")) {
+							player.equip(datas[index].create());
+							System.out.println(equipment.getName() + "를 장착했습니다.");
+						}
+						else {
+							System.out.println(equipment.getName() + "를 두고 떠납니다.");
+						}
+					}
 					eventFlag = false;
 				}
 			}

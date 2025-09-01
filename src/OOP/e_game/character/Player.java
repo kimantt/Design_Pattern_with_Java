@@ -51,5 +51,9 @@ public class Player extends Character {
 	public void heal(int point) {
 		this.currentHp = Math.min(this.currentHp + point, hp);
 	}
+	
+	public Equipment getEquipment(Slot slot) {
+		return equipments.getEquipment(slot);
+	}
 
 }

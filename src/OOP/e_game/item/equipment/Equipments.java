@@ -33,4 +33,8 @@ public class Equipments {
 		return Optional.of(equipments.get(slot));
 	}
 	
+	public Equipment getEquipment(Slot slot) {
+		return equipments.get(slot);
+	}
+	
 }

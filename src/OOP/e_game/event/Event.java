@@ -6,6 +6,6 @@ import OOP.e_game.character.Player;
 
 public interface Event {
 
-	void proceed(Player player, Scanner sc);
+	boolean proceed(Player player, Scanner sc);
 	
 }
