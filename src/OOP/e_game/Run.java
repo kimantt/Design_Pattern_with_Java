@@ -18,7 +18,7 @@ public class Run {
 		Player player = new Player("플레이어", 200, 30, 10);
 		int day = 8;
 		Event[] events = new Event[day];
-		for (int i = 0; i < events.length; i++) {
+		for (int i = 0; i < events.length - 1; i++) {
 			int e = random.nextInt(0, 3);
 			events[i] = switch (e) {
 				case 0 -> new CombatEvent();
@@ -27,6 +27,7 @@ public class Run {
 				default -> throw new IllegalArgumentException("Unexpected value: " + e);
 			};
 		}
+		events[day - 1] = new CombatEvent();
 		
 		for (int i = 0; i < events.length; i++) {			
 			System.out.println("------------------------------------");
